@@ -10,7 +10,12 @@ const ExpenseForm = () => {
   })
 
   function inputChangedHandler(inputIndentifier, enteredValue) {
-    setInputValues(enteredAmount)
+    setInputValues((curInputValues) => {
+      return {
+        ...curInputValues,
+        [inputIndentifier]: enteredValue,
+      }
+    })
   }
 
   return (
@@ -22,8 +27,8 @@ const ExpenseForm = () => {
           label='Amount'
           textInputConfig={{
             keyboardType: 'decimal-pad',
-            onChangeText: amountChangeHandler,
-            value: amountValue,
+            onChangeText: inputChangedHandler.bind(this, 'amount'),
+            value: inputValues.amount,
           }}
         />
         <Input
@@ -32,7 +37,8 @@ const ExpenseForm = () => {
           textInputConfig={{
             placeholder: 'YYYY-MM-DD',
             maxLength: 10,
-            onChangeText: () => {},
+            onChangeText: inputChangedHandler.bind(this, 'date'),
+            value: inputValues.date,
           }}
         />
       </View>
@@ -42,6 +48,8 @@ const ExpenseForm = () => {
           multiline: true,
           //autoCapitalize: 'none', // default is "sentences"
           //autoCorrect: false // default is true
+          onChangeText: inputChangedHandler.bind(this, 'description'),
+          value: inputValues.description,
         }}
       />
     </View>
